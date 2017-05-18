@@ -7,7 +7,7 @@ using namespace std;
 
 int each_line = 16;
 int each_word = 8;
-int all_word = 97;
+int all_word = 96;
 
 string to_sbit(int a) {
   stringstream ss;

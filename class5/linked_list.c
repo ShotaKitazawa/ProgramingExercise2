@@ -7,33 +7,32 @@ typedef struct node {
 } node;
 
 void print_list(node* head);
-void insert_list(node* head);
-void delete_list(node* head);
+node* insert_list(node* head);
+node* delete_list(node* head);
 
 void main(){
   node* head = NULL;
   node* new = NULL;
-  node* pointer;
 
   head = (node*)malloc(sizeof(node));
   head->data = 1.0f;
   head->next = NULL;
 
-  pointer = head;
+  // add new nodes to the end of list
   int i;
-  for (i = 0; i < 19; i++){
-    new = (node*)malloc(sizeof(node));
-    pointer->next = new;
-    new->data = (i+2)*1.0f;
-    new->next = NULL;
-    pointer = pointer->next;
+  for (i = 0; i < 19; i++) {       // 19 nodes
+    new = (node*)malloc(sizeof(node)); // allocate memory
+    new->next = head;
+    head = new;
+    new->data = (i + 2) * 1.0f;        // assign data in new node
   }
 
+  node* pointer = head;
 
   print_list(head);
-  insert_list(head);
+  head = insert_list(head);
   print_list(head);
-  delete_list(head);
+  head = delete_list(head);
   print_list(head);
 
 }
@@ -46,7 +45,7 @@ void print_list(node* head){
   }
 }
 
-void insert_list(node* head){
+node* insert_list(node* head){
   int n;
   float f;
   printf("position to insert: ");
@@ -73,9 +72,10 @@ void insert_list(node* head){
   else {
     printf("error: invalid input\n");
   }
+  return head;
 }
 
-void delete_list(node* head){
+node* delete_list(node* head){
   int n;
   printf("position to delete: ");
   scanf("%d",&n);
@@ -93,4 +93,5 @@ void delete_list(node* head){
   else{
     printf("error: invalid input\n");
   }
+  return head;
 }

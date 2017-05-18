@@ -1,0 +1,66 @@
+#include <stdio.h>
+#define MAXSIZE 1000
+
+void array_print(char *s, int heap[], int no) {
+  printf("%s ", s);
+  int i;
+  for (i = 0; i < no; i++)
+    printf("%d ", heap[i]);
+  printf("\n");
+}
+
+void swap (int *a, int *b) {
+  int temp = *a;
+  *a = *b;
+  *b = temp;
+}
+
+void quick_sort(int list[], int low, int high, int num) {
+  int pivot, low_index, high_index, i;
+  if (low < high) {
+    pivot      = list[(low+high)/2];
+    printf("pivot: %d, list_num: %d\n", pivot, high-low+1);
+
+    int index = 0;
+    int array[high-low+1];
+    int* arrayp_for = array;
+    int* arrayp_back= array;
+    for (i = 0; i < high-low; i++) arrayp_back++;
+    for (i = 0; i < high-low+1;i++){
+      if (i == (high-low)/2) continue;
+      if (list[i] <= pivot) {
+        *arrayp_for = list[i];
+        arrayp_for++;
+        index++;
+      }
+      else{
+        *arrayp_back= list[i];
+        arrayp_back--;
+      }
+    }
+    printf("index: %d\n",index);
+    *arrayp_for = pivot;
+    for (i = 0; i < high-low+1;i++){
+      list[i] = array[i];
+    }
+
+    array_print("swap",list,num);
+    quick_sort(list, low, index-1,num);           // sort low  part
+    quick_sort(list, index+1,high,num);          // sort high part
+  }
+}
+
+void main() {
+  int array[MAXSIZE];
+  int i, num;
+
+  printf("enter the number of elements n = ");
+  scanf("%d", &num);
+  printf("enter %d elements one by one\n", num);
+  for (i = 0; i < num; i++) {
+    scanf("%d", &array[i]);
+  }
+  array_print("the original array is", array, num);
+  quick_sort(array, 0, num - 1,num);
+  array_print("the  sorted  array is", array, num);
+}
