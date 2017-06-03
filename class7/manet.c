@@ -11,7 +11,7 @@ gcc mobile_nodes.c -o mobile_nodes -lglut -lGL
 #include <unistd.h>  // for usleep()
 #include <stdio.h>
 
-#define no_nodes 100
+#define no_nodes 150
 
 typedef struct node {  // nodes
   float x;             // x coordinate
@@ -80,8 +80,8 @@ void display(void) {
     }
 
     glColor4f(1.0, 0.0, 0.0, 1.0);  // set current color r, g, b, and alpha
-    glRectf(nodes[i].x - 0.015, nodes[i].y - 0.015,   // draw (fill) node
-            nodes[i].x + 0.015, nodes[i].y + 0.015);  // with little rectangle
+    glRectf(nodes[i].x - 0.010, nodes[i].y - 0.010,   // draw (fill) node
+            nodes[i].x + 0.010, nodes[i].y + 0.010);  // with little rectangle
     if (nodes[i].c-- == 0) {                          // counter--
       nodes[i].dx = rand() % 3 - 1;  // 0, 1, 2 - 1 = -1, 0, 1: direction
       nodes[i].dy = rand() % 3 - 1;  // 0, 1, 2 - 1 = -1, 0, 1: direction
