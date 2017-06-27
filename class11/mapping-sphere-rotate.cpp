@@ -5,6 +5,8 @@
 #include <string>
 #include <memory.h>
 #include <jpeglib.h>
+#include <math.h>
+#define PI 3.141592
 
 GLsizei g_width = 640;   // window width
 GLsizei g_height = 640;  // window height
@@ -34,14 +36,15 @@ GLfloat red = 1.0f;
 GLfloat green = 1.0f;
 GLfloat blue = 1.0f;
 
+GLfloat radius = 1.28f;
 GLint longitude = 43;
 GLint latitude = 42;
 
 GLUquadricObj *sphere = NULL;                          // a quadrics object
-//GLfloat light_position[4] = {light_x, light_y, light_z, 1.0f};  // light position
 //GLfloat light_position[4] = {20.0f, 1.2f, 4.0f, 1.0f};  // light position
 GLfloat light_position[4] = {20.0f, 1.2f, 4.0f, 0.0f};  // light position
-GLfloat spotDirrection[] = {-0.5, 0.0, -1.0 }; //スポットライトを向ける方向
+//GLfloat spotDirrection[] = {-0.5, 0.0, -1.0 }; //スポットライトを向ける方向
+GLfloat spotDirrection[] = {0,0,0 }; //スポットライトを向ける方向
 
 typedef struct ImageData {  // texture info:
   GLsizei texture_width;    // texture width
@@ -118,12 +121,21 @@ void displayFunc() {
   //printf("angle_z: %f\n", angle_z);
 
   glColor3f(red, green, blue);  // sphere color
-  // gluSphere(sphere, 1.28f, 43, 42);                          // sphere,
-  // radius, lines of longitude, lines of latitude
-  gluSphere(sphere, 1.28f, longitude,
+  gluSphere(sphere, radius, longitude,
             latitude);  // sphere, radius, lines of longitude, lines of latitude
   glPopMatrix();        // pop matrix from stack (restore)
   glutSwapBuffers();    // swap buffers of the current window if double buffered
+
+  light_position[0] = 10 * radius * cos(angle_z * PI / 180.0f);
+  light_position[2] = 10 * radius * sin(angle_z * PI / 180.0f);
+
+  printf("light_position_x: %f\n", light_position[0]);
+  printf("light_position_y: %f\n", light_position[1]);
+  printf("light_position_z: %f\n", light_position[2]);
+
+  glLightfv(GL_LIGHT0, GL_POSITION, light_position);  // set position of light
+  glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spotDirrection ); //スポットライトの向ける方向（デフォルト (0,0,-1.0)）
+
 }
 
 void reshapeFunc(GLsizei w, GLsizei h) {
@@ -142,10 +154,6 @@ void reshapeFunc(GLsizei w, GLsizei h) {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();                                   // view model:
   glTranslatef(0.0f, 0.0f, -5.0f);                    // translate
-
-  light_position[0] += 10.0f;
-  light_position[1] += 10.0f;
-  //light_position[2] += 10.0f;
 
   glLightfv(GL_LIGHT0, GL_POSITION, light_position);  // set position of light
   glLightfv( GL_LIGHT0, GL_SPOT_DIRECTION, spotDirrection ); //スポットライトの向ける方向（デフォルト (0,0,-1.0)）
